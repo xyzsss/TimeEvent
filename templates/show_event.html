@@ -1,0 +1,30 @@
+{% extends "bootstrap/base.html" %}
+{% block content %}
+ <div class="container">
+    <div class="row">
+        <div class="col-md-8"><h2> EVENTS LIST </h2> </div>
+        <div class="col-md-4"><h4> <a href="/" class="text-center lead">BACK TO HOME</a> </h4> </div>
+    </div>
+    <table class="table table-hover">
+    <thead>
+        <tr>
+                  <th>TITLE</th>
+                  <th>BODY</th>
+                  <th>USER</th>
+                  <th>PUBLISH DATE</th>
+        </tr>
+    </thead>
+    <tbody>
+        {% for event in events %}
+        <tr>
+                <td>{{ event.title }}</td>
+                <td> {{ event.body }}</td>
+                <td> {{ event.user }} </td>
+                <td> {{ event.pub_date }}</td>
+        </tr>
+        {% endfor %}
+    </tbody>
+    </table>
+
+</div>
+{% endblock %}

@@ -4,7 +4,7 @@ from flask_bootstrap import Bootstrap
 from datetime import datetime
 from forms import UserForm
 from flask_sqlalchemy import SQLAlchemy
-from schema import User
+from schema import *
 
 app = Flask(__name__)
 Bootstrap(app)
@@ -19,6 +19,32 @@ db = SQLAlchemy(app)
 # development added
 app.config['TEMPLATES_AUTO_RELOAD'] = True
 app.jinja_env.auto_reload = True
+
+
+def get_event_by_user(events):
+    rows = []
+    for event in events:
+        row = {
+            'title': event.title,
+            'body': '~~~~~',
+            'pub_date': event.pub_date,
+            'user': str(event.user)}
+        rows.append(row)
+    return rows
+
+
+@app.route('/<user>/events')
+def show_event(user):
+    if 'username' in session:
+        if session['username'] == user:
+            name = User.query.filter_by(name=session['username']).first()
+            events = Event.query.filter_by(user=name).all()
+            rows = get_event_by_user(events)
+            return render_template('show_event.html', events=rows)
+        else:
+            message = "You come to place named No Man's Land "
+    flash(message)
+    return redirect(url_for('index'))
 
 
 def insert_user_record(request, form):
@@ -95,8 +121,17 @@ def login():
 @app.route('/loginCheck', methods=['POST', 'GET'])
 def login_action():
     if request.method == 'POST':
-        session['username'] = request.form['username']
-        return redirect(url_for('index'))
+        user_input = request.form['username'].strip()
+        if user_input is not '':
+            res = User.query.filter_by(name=user_input).first()
+            if res is not None:
+                session['username'] = user_input
+                return redirect(url_for('index'))
+            else:
+                message = "User '" + user_input + "' not exists!"
+        else:
+            message = "User empty not allowed!"
+    flash(message)
     return redirect(url_for('login'))
 
 

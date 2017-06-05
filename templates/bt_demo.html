@@ -10,16 +10,23 @@
 {% block content %}
 <div class="container">
 <br/><br/>
- {% if name %}
-  <h4>  
-      <div class="row">
-          <div class="col-md-8"> Hello, {{ name }} </div>
-          <div class="col-md-4">  <a href="/logout">Logout</a> </div>
-      </div>
-  </h4>
- {% endif %}
 
-  <h3>Welcom to Bootstrap</h3>
+     {% if name %}
+      <h4>  
+          <div class="row">
+              <div class="col-md-8"> Hello, {{ name }} </div>
+              <div class="col-md-4">  <a href="/logout">Logout</a> </div>
+          </div>
+      </h4>
+     {% endif %}
+
+
+      <div class="row">
+          <div class="col-md-4"> <h4> <a href="/{{ name }}/events"> SHOW MY EVENTS</a></h4> </div>
+          <div class="col-md-12"> <h3>Welcom to Bootstrap</h3></div>
+      </div>
+  
+
 </div>
 
 
