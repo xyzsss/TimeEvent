@@ -3,15 +3,18 @@ from flask import Flask, render_template, request, redirect, url_for, session, f
 from flask_bootstrap import Bootstrap
 from datetime import datetime
 from forms import UserForm
-import sqlite3 as sql
-
+from flask_sqlalchemy import SQLAlchemy
+from schema import User
 
 app = Flask(__name__)
 Bootstrap(app)
 
 # development changed
 app.secret_key = "sawadika"
-DATABASE = 'timeEvent.db'
+app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:////Users/mike/github/TimeEvent/timeEvent.db'
+app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = True
+db = SQLAlchemy(app)
+
 
 # development added
 app.config['TEMPLATES_AUTO_RELOAD'] = True
@@ -20,25 +23,18 @@ app.jinja_env.auto_reload = True
 
 def insert_user_record(request, form):
     try:
-        u_name, u_email, u_password, u_extra = (
-            request.form['name'],
-            request.form['email'],
-            request.form['password'],
-            request.form['extra']
-        )
-        with sql.connect(DATABASE) as con:
-            cur = con.cursor()
-            cur.execute(
-                "INSERT INTO Users (name, email, password, extra) VALUES (?,?,?,?)", (u_name, u_email, u_password, u_extra)
-            )
-            con.commit()
-            msg = "Record successfully added"
+        user_info = User(
+            name=request.form['name'],
+            email=request.form['email'],
+            password=request.form['password'],
+            extra=request.form['extra'])
+        db.session.add(user_info)
+        db.session.commit()
+        msg = "Record successfully added"
     except:
-        con.rollback()
         msg = "error in insert operation"
     finally:
         flash(msg)
-        con.close()
         return redirect(url_for('index'))
     return render_template('register.html', form=form)
 
@@ -47,7 +43,6 @@ def insert_user_record(request, form):
 def register():
     form = UserForm()
     if request.method == 'POST':
-        print request.form["csrf_token"]
         if form.validate() is False:
             return render_template('register.html', form=form, is_GET=True)
         else:
@@ -58,13 +53,14 @@ def register():
 
 @app.route('/userList')
 def list_users():
-    con = sql.connect(DATABASE)
-    con.row_factory = sql.Row
-    cur = con.cursor()
-    cur.execute("select name, email, extra from Users")
-    rows = cur.fetchall()
-    for row in rows:
-        print row
+    user_list = User.query.all()
+    rows = []
+    for user in user_list:
+        row = {
+            'name': user.name,
+            'email': user.email,
+            'extra': user.extra}
+        rows.append(row)
     return render_template("users_list.html", Users=rows)
 
 
