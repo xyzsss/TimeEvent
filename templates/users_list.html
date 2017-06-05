@@ -1,0 +1,30 @@
+{% extends "bootstrap/base.html" %}
+{% block content %}
+ <div class="container">
+    <div class="row">
+        <div class="col-md-8"><h2> USERS LIST </h2> </div>
+        <div class="col-md-4"><h4> <a href="/" class="text-center lead">BACK TO HOME</a> </h4> </div>
+    </div>
+    <table class="table table-hover">
+    <thead>
+        <tr>
+                  <th>Name</th>
+                  <th>email</th>
+                  <th>password</th>
+                  <th>extra</th>
+        </tr>
+    </thead>
+    <tbody>
+        {% for user in Users %}
+        <tr>
+                <td>{{ user.name }}</td>
+                <td>{{ user.email }}</td>
+                <td> ***** </td>
+                <td>{{ user.extra }}</td>
+        </tr>
+        {% endfor %}
+    </tbody>
+    </table>
+
+</div>
+{% endblock %}

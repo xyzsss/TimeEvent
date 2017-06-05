@@ -1,0 +1,43 @@
+{% extends "bootstrap/base.html" %}
+{% block content %}
+
+ <div class="container">
+
+    <div class="row">
+      <div class="col-md-12">
+          {% with messages = get_flashed_messages() %}
+              {% if messages %}
+              {% for message in messages %}
+              <p class="bg-success text-center"> {{ message }} </p>
+              {% endfor %}       
+              {% endif %}
+          {% endwith %}
+      </div>
+    </div>
+
+
+    <div class="form-group">
+        <br><br>
+        <div class="row">
+            <div class="col-md-8"><a href="/register" class="btn btn-link"> No account,Register now? </a></div>
+            <div class="col-md-4"><a href="/userList" class="btn btn-link"> SHOW USERS </a> </div>
+        </div>
+        <div class="row">
+            <div class="col-md-2"></div>
+            <div class="col-md-8">
+                 <form action="/loginCheck" method="POST">
+                     <div class="form-group col-lg-4 ">
+                        <label for="username" class="col-5 col-form-label">User Name</label>
+                        <input type=text name=username required class="form-control">
+                        <br>
+                        <input type=submit value=Login class="btn btn-primary"> 
+                    </div>
+                </form>
+            </div>
+            <div class="col-md-2"></div>
+        </div>        
+
+
+    </div>
+</div>
+{% endblock %}

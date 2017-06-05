@@ -1,0 +1,62 @@
+{% extends "bootstrap/base.html" %}
+{% block content %}
+ <div class="container">
+
+    <div class="row">
+      <div class="col-md-12">
+          {% with messages = get_flashed_messages() %}
+              {% if messages %}
+              {% for message in messages %}
+              <p class="bg-info text-center"> {{ message }} </p>
+              {% endfor %}       
+              {% endif %}
+          {% endwith %}
+
+        {% if is_GET %}
+          {% for message in form.name.errors %}
+            <div class="bg-info text-center">{{ message }}</div>
+          {% endfor %}
+
+          {% for message in form.email.errors %}
+            <div class="bg-info text-center">{{ message }}</div>
+          {% endfor %}
+
+          {% for message in form.password.errors %}
+            <div class="bg-info text-center">{{ message }}</div>
+          {% endfor %}
+        {% endif %}
+      </div>
+    </div>
+
+    <div class="form-group">
+        <br><br>
+        <a href="/login" class="btn btn-link"> BACK TO LOGIN </a>
+
+         <form action="/register" method="POST">
+            {{ form.hidden_tag() }}
+             <div class="form-group col-md-8">
+             <legend>Register Form</legend>
+                <label class="col-md-8 control-label">
+                    {{ form.name.label(class="orm-group col-md-4") }}
+                    {{ form.name }}
+                </label>
+                <label class="col-md-8 control-label">
+                    {{ form.password.label(class="orm-group col-md-4") }}
+                    {{ form.password }}
+                </label>
+                <label class="col-md-8 control-label">
+                    {{ form.email.label(class="orm-group col-md-4") }}
+                    {{ form.email }}
+                </label>
+                <label class="col-md-8 control-label">
+                    {{ form.extra.label(class="orm-group col-md-4") }}
+                    {{ form.extra(class="form-control") }}
+                </label>                <label class="col-md-8 control-label">
+                  {{ form.submit(class_="btn btn-default") }}
+                </label>
+            </div>
+        </form>
+
+    </div>
+</div>
+{% endblock %}

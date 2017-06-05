@@ -1,0 +1,28 @@
+{% extends "bootstrap/base.html" %}
+{% block title %}This is an example page{% endblock %}
+
+{% block navbar %}
+<div class="navbar navbar-fixed-top">
+  <!-- ... -->
+</div>
+{% endblock %}
+
+{% block content %}
+<div class="container">
+<br/><br/>
+ {% if name %}
+  <h4>  
+      <div class="row">
+          <div class="col-md-8"> Hello, {{ name }} </div>
+          <div class="col-md-4">  <a href="/logout">Logout</a> </div>
+      </div>
+  </h4>
+ {% endif %}
+
+  <h3>Welcom to Bootstrap</h3>
+</div>
+
+
+
+{% endblock %}
+
