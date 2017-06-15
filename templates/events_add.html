@@ -1,0 +1,58 @@
+{% extends "bootstrap/base.html" %}
+{% block content %}
+<!-- <script src="//cdn.ckeditor.com/4.4.6/standard/ckeditor.js"></script> -->
+<script src="//cdn.ckeditor.com/4.4.6/basic/ckeditor.js"></script>
+<!-- <script src="//cdn.ckeditor.com/4.4.6/full/ckeditor.js"></script> -->
+ <div class="container-fluid">
+    <div class="row">
+      <div class="col-md-12">
+        {% with messages = get_flashed_messages() %}
+            {% if messages %}
+            {% for message in messages %}
+            <p class="bg-info text-center"> {{ message }} </p>
+            {% endfor %}       
+            {% endif %}
+        {% endwith %}
+
+        {% if is_GET %}
+          {% for message in form.title.errors %}
+            <div class="bg-info text-center">{{ message }}</div>
+          {% endfor %}
+          {% for message in form.body.errors %}
+            <div class="bg-info text-center">{{ message }}</div>
+          {% endfor %}
+        {% endif %}
+      </div>
+    </div>
+
+    <div class="form-group col-md-12">
+        <br><br>
+        <nav class="nav nav-pills">
+            <li role="presentation" class="active"><a href="/events/list" class="btn btn-link"> EVENTS LIST </a></li>
+            <li role="presentation"><a href="/" class="btn btn-link"> WITH PROBLEM ?</a></li>
+        </nav>
+        <br>
+        <form action="/events/add" method="POST">
+            {{ form.hidden_tag() }}
+             <div class="form-group col-md-8">
+             <legend>EVENT ADDICTION</legend>
+                <label class="col-md-8 control-label">
+                    {{ form.title.label(class="orm-group col-md-4") }}
+                    {{ form.title }}
+                </label>
+                <label class="col-md-8 control-label">
+                    {{ form.body.label(class="orm-group") }}<br>
+                    {{ form.body(class="ckeditor")  }}
+                </label>
+                <label class="col-md-8 control-label">
+                    {{ form.pub_date.label(class="orm-group col-md-2") }}
+                    {{ form.pub_date }}
+                </label><label class="col-md-8 control-label">
+                  {{ form.submit(class_="btn label-success") }}
+                </label>
+
+            </div>
+        </form>
+    </div>
+</div>
+{% endblock %}

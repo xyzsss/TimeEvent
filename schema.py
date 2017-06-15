@@ -8,11 +8,10 @@ app = Flask(__name__)
 app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:////Users/mike/github/TimeEvent/timeEvent.db'
 app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = True
 db = SQLAlchemy(app)
-app.secret_key = "sawadika"
-
 # DEVELOPMENT
 app.config['TEMPLATES_AUTO_RELOAD'] = True
 app.jinja_env.auto_reload = True
+app.secret_key = "sawadika"
 
 
 class User(db.Model):
@@ -56,7 +55,7 @@ class Event(db.Model):
 
 
 if __name__ == "__main__":
-    db.drop_all()
+    # db.drop_all()
     print 'db User droped!'
     db.create_all()
     print 'db User created!'

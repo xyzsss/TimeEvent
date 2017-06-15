@@ -3,28 +3,41 @@
  <div class="container">
     <div class="row">
         <div class="col-md-8"><h2> EVENTS LIST </h2> </div>
-        <div class="col-md-4"><h4> <a href="/" class="text-center lead">BACK TO HOME</a> </h4> </div>
+        <div class="col-md-4"><h2> <a href="/" class="text-center lead">BACK TO HOME</a> </h2> </div>
     </div>
-    <table class="table table-hover">
-    <thead>
-        <tr>
-                  <th>TITLE</th>
-                  <th>BODY</th>
-                  <th>USER</th>
-                  <th>PUBLISH DATE</th>
-        </tr>
-    </thead>
-    <tbody>
-        {% for event in events %}
-        <tr>
-                <td>{{ event.title }}</td>
-                <td> {{ event.body }}</td>
-                <td> {{ event.user }} </td>
-                <td> {{ event.pub_date }}</td>
-        </tr>
-        {% endfor %}
-    </tbody>
-    </table>
-
+    <div class="row">
+        <br>
+            <div class="col-md-3"><a href="/events/add" class="text-center lead">ADD NEW EVENT</a> </div>
+            <div class="col-md-3"> the {{ cur_page }} page of {{ total_page }}</div>
+            <div class="col-md-6">
+                <div class="col-md-3">
+                {% if last_page %}
+                    <a href="/events/list/{{last_page}}" class="text-center lead">last page</a>
+                {% endif %}
+                </div>
+                <div class="col-md-3">
+                {% if next_page %}
+                    <a href="/events/list/{{next_page}}" class="text-center lead">next page</a>
+                {% endif %}
+                </div>
+            </div>
+        <br>
+    </div>
+    <br>
+    <div class="row">
+                <div class="col-md-2">  TITLE </div>
+                <div class="col-md-6">  BODY </div>
+                <div class="col-md-3">  PUBLISH </div>
+    </div>
+    <br>
+    {% for event in events %}
+        <div class="row">
+              <div class="col-md-2"><a href="/events/{{event.id}}">{{ event.title }}</a></div>
+              <div class="col-md-6 resizable">  {{ event.body }} </div>
+              <div class="col-md-3">  {{ event.pub_date }} </div>
+        </div>
+        <br>
+    {% endfor %}
+    </div>
 </div>
 {% endblock %}

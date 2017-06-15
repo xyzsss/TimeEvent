@@ -28,16 +28,19 @@
       </div>
     </div>
 
-    <div class="form-group">
+    <div class="form-group col-md-12">
         <br><br>
-        <a href="/login" class="btn btn-link"> BACK TO LOGIN </a>
-
-         <form action="/register" method="POST">
+        <nav class="nav nav-pills">
+            <li role="presentation" class="active"><a href="/user/login" class="btn btn-link"> BACK TO LOGIN </a></li>
+            <li role="presentation"><a href="/user/login" class="btn btn-link"> WITH PROBLEM ?</a></li>
+        </nav>
+        <br>
+        <form action="/user/register" method="POST">
             {{ form.hidden_tag() }}
              <div class="form-group col-md-8">
-             <legend>Register Form</legend>
+             <legend>USER REGISTER</legend>
                 <label class="col-md-8 control-label">
-                    {{ form.name.label(class="orm-group col-md-4") }}
+                    {{ form.name.label(class="orm-group col-md-4 ") }}
                     {{ form.name }}
                 </label>
                 <label class="col-md-8 control-label">
@@ -51,12 +54,11 @@
                 <label class="col-md-8 control-label">
                     {{ form.extra.label(class="orm-group col-md-4") }}
                     {{ form.extra(class="form-control") }}
-                </label>                <label class="col-md-8 control-label">
-                  {{ form.submit(class_="btn btn-default") }}
+                </label><label class="col-md-8 control-label">
+                  {{ form.submit(class_="btn label-success") }}
                 </label>
             </div>
         </form>
-
     </div>
 </div>
 {% endblock %}

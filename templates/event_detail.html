@@ -1,0 +1,19 @@
+{% extends "bootstrap/base.html" %}
+{% block content %}
+ <div class="container">
+
+     {% if content %}
+        <div class="row h4">
+        {{ content.title }}
+        </div>
+
+        <div class="row">
+        {% autoescape false %}
+        {{ content.body }}
+        {% endautoescape %}
+        </div>
+     {% endif %}
+
+
+ </div>
+{% endblock %}
