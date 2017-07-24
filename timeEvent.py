@@ -8,6 +8,7 @@ from schema import User, Event, db
 # DEVEPLOMENT
 import pdb
 from flask_debugtoolbar import DebugToolbarExtension
+from werkzeug.security import generate_password_hash, check_password_hash
 
 
 app = Flask(__name__)
@@ -95,13 +96,17 @@ def events_show(page_num):
     if 'username' in session:
         name = User.query.filter_by(name=session['username']).first()
         all_events = Event.query.order_by(Event.id.desc()).filter_by(user=name).all()
-        total_page, events = split_page(all_events, the_order=page_num)
-        rows = get_event_by_user(events)
-        next_page = page_num + 1 if page_num + 1 <= total_page else False
-        last_page = page_num - 1 if page_num > 1 else False
-        return render_template(
-            'show_event.html', events=rows, cur_page=page_num,
-            total_page=total_page, next_page=next_page, last_page=last_page)
+        if all_events:
+            total_page, events = split_page(all_events, the_order=page_num)
+            rows = get_event_by_user(events)
+            next_page = page_num + 1 if page_num + 1 <= total_page else False
+            last_page = page_num - 1 if page_num > 1 else False
+            return render_template(
+                'show_event.html', events=rows, cur_page=page_num,
+                total_page=total_page,
+                next_page=next_page, last_page=last_page)
+        else:
+            return render_template('show_event.html', noevents=True)
     message = "You come to place named No Man's Land "
     flash(message)
     return redirect(url_for('index'))
@@ -217,11 +222,15 @@ def user_login():
 def login_action():
     if request.method == 'POST':
         user_input = request.form['username'].strip()
-        if user_input is not '':
+        pass_input = request.form['password'].strip()
+        if user_input and user_input is not '':
             res = User.query.filter_by(name=user_input).first()
             if res is not None:
-                session['username'] = user_input
-                return redirect(url_for('index'))
+                if check_password_hash(res.password_hash, pass_input):
+                    session['username'] = user_input
+                    return redirect(url_for('index'))
+                else:
+                    message = "Password input wrong!"
             else:
                 message = "User '" + user_input + "' not exists!"
         else:

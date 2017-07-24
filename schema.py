@@ -2,6 +2,7 @@
 from flask import Flask, session
 from flask_sqlalchemy import SQLAlchemy
 from datetime import datetime
+from werkzeug.security import generate_password_hash, check_password_hash
 
 
 app = Flask(__name__)
@@ -18,17 +19,21 @@ class User(db.Model):
     id = db.Column(db.Integer, primary_key=True)
     name = db.Column(db.String(80), unique=True)
     email = db.Column(db.String(120), unique=True)
-    password = db.Column(db.String(120))
+    password_hash = db.Column(db.String(128))
     extra = db.Column(db.String(240))
 
     def __init__(self, name, email, password, extra):
         self.name = name
         self.email = email
-        self.password = password
+        self.password_hash = generate_password_hash(password)
         self.extra = extra
 
     def __repr__(self):
         return '<User %r>' % self.name
+
+    @property
+    def password(self):
+        raise AttributeError('password is not a readable attribute')
 
 
 class Event(db.Model):
@@ -60,7 +65,7 @@ if __name__ == "__main__":
     db.create_all()
     print 'db User created!'
     admin = User(
-        name='admin', email='admin@admin.com', password='123', extra="")
+        name='admin', email='admin@admin.com', password='admin', extra="")
     guest = User(
         name='guest', email='guest@guest.com', password='123', extra="")
     db.session.add(admin)
