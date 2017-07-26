@@ -1,38 +1,12 @@
-{% extends "bootstrap/base.html" %}
+{% extends "base.html" %}
+
 {% block content %}
  <div class="container">
-
-    <div class="row">
-      <div class="col-md-12">
-          {% with messages = get_flashed_messages() %}
-              {% if messages %}
-              {% for message in messages %}
-              <p class="bg-info text-center"> {{ message }} </p>
-              {% endfor %}       
-              {% endif %}
-          {% endwith %}
-
-        {% if is_GET %}
-          {% for message in form.name.errors %}
-            <div class="bg-info text-center">{{ message }}</div>
-          {% endfor %}
-
-          {% for message in form.email.errors %}
-            <div class="bg-info text-center">{{ message }}</div>
-          {% endfor %}
-
-          {% for message in form.password.errors %}
-            <div class="bg-info text-center">{{ message }}</div>
-          {% endfor %}
-        {% endif %}
-      </div>
-    </div>
-
     <div class="form-group col-md-12">
         <br><br>
         <nav class="nav nav-pills">
             <li role="presentation" class="active"><a href="/user/login" class="btn btn-link"> BACK TO LOGIN </a></li>
-            <li role="presentation"><a href="/user/login" class="btn btn-link"> WITH PROBLEM ?</a></li>
+            <li role="presentation"><a href="/user/login" class="btn btn-link"> HAVE ACCOUNT ?</a></li>
         </nav>
         <br>
         <form action="/user/register" method="POST">
@@ -55,10 +29,10 @@
                     {{ form.extra.label(class="orm-group col-md-4") }}
                     {{ form.extra(class="form-control") }}
                 </label><label class="col-md-8 control-label">
-                  {{ form.submit(class_="btn label-success") }}
+                  {{ form.submit(class="btn label-success") }}
                 </label>
             </div>
         </form>
     </div>
 </div>
-{% endblock %}
+{% endblock content %}

@@ -1,0 +1,40 @@
+{% extends "bootstrap/base.html" %}
+{% block scripts %}
+    {{ super() }}
+    <!-- <script src="//cdn.ckeditor.com/4.4.6/basic/ckeditor.js"></script> -->
+    <script src="//cdn.ckeditor.com/4.4.6/standard/ckeditor.js"></script>
+    <!-- <script src="//cdn.ckeditor.com/4.4.6/full/ckeditor.js"></script> -->
+    <script type="text/javascript" src="{{ url_for('static', filename = 'timeEvent.js') }}"></script>
+{% endblock scripts %}
+
+{% block navbar %}
+    {{ super() }}
+    <div class="row text-center">
+      <div class="col-xs-6 col-md-4"><h3> TimeEvent </h3> </div>
+      <div class="col-xs-6 col-md-4"> . </div>
+      <div class="col-xs-6 col-md-4"> . </div>
+    </div>
+
+    <div class="row">
+          <div class="col-md-12">
+              {% with messages = get_flashed_messages() %}
+                  {% if messages %}
+                  {% for message in messages %}
+                  <p class="bg-success text-center"> {{ message }} </p>
+                  {% endfor %}       
+                  {% endif %}
+              {% endwith %}
+          </div>
+       
+    </div>
+{% endblock navbar %}
+
+ 
+
+{% block body %}
+    {{ super() }}
+    {% block footbar %}
+        <br/>
+        <p class="text-center">Design by exuxu50</p>
+    {% endblock footbar %}
+{% endblock body %}

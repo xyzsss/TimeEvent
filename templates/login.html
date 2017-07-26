@@ -1,21 +1,7 @@
-{% extends "bootstrap/base.html" %}
+{% extends "base.html" %}
 {% block content %}
-
+    {{ super() }}
  <div class="container">
-
-    <div class="row">
-      <div class="col-md-12">
-          {% with messages = get_flashed_messages() %}
-              {% if messages %}
-              {% for message in messages %}
-              <p class="bg-success text-center"> {{ message }} </p>
-              {% endfor %}       
-              {% endif %}
-          {% endwith %}
-      </div>
-    </div>
-
-
     <div class="form-group">
         <br><br>
         <div class="row">
@@ -25,15 +11,19 @@
         <div class="row">
             <div class="col-md-2"></div>
             <div class="col-md-8">
-                 <form action="/loginCheck" method="POST">
-                     <div class="form-group col-lg-4 ">
-                        <label for="username" class="col-5 col-form-label">User Name</label>
-                        <input type=text name=username required class="form-control">
-                        <label for="password" class="col-5 col-form-label">Password</label>
-                        <input type=text name=password required class="form-control">
-                        <br>
-                        <input type=submit value=Login class="btn btn-primary"> 
-                    </div>
+                 <form action="/user/loginVerify" method="POST">
+                        {{ form.csrf_token }}
+                        <label class="col-md-8 control-label">
+                            {{ form.name.label(class="orm-group col-md-4") }}
+                            {{ form.name(class="form-control") }}
+                        </label>
+                        <label class="col-md-8 control-label">
+                            {{ form.password.label(class="orm-group col-md-4") }}
+                            {{ form.password(class="form-control") }}
+                        </label>
+                        </label><label class="col-md-8 control-label">
+                          {{ form.submit(class="btn label-info") }}
+                        </label>
                 </form>
             </div>
             <div class="col-md-2"></div>

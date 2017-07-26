@@ -1,32 +1,30 @@
 {% extends "base.html" %}
 
-{% block title %} Add Event {% endblock title %}
-
-
 {% block content %}
+
  <div class="container-fluid">
     <div class="form-group col-md-12">
         <br><br>
         <nav class="nav nav-pills">
-            <li role="presentation" class="active"><a href="/events/list/1" class="btn btn-link"> EVENTS LIST </a></li>
-            <li role="presentation"><a href="/" class="btn btn-link"> WITH PROBLEM ?</a></li>
+            <li role="presentation" class="active"><a href="/events/list/1" class="btn btn-link"> ALL EVENTS </a></li>
         </nav>
         <br>
-        <form action="/events/add" method="POST">
-            {{ form.hidden_tag() }}
+       <form action="/events/add" method="POST">
              <div class="form-group col-md-8">
-             <legend>EVENT ADDICTION</legend>
+             <legend>EVENT MODIFICATION</legend>
+                {{ form.hidden_tag() }}
                 <label class="col-md-8 control-label">
-                    {{ form.title.label(class="orm-group col-md-4") }}
-                    {{ form.title }}
+                    {{ form.title.label }}
+                    {{ form.title(size=40,value=event.title) }}
                 </label>
                 <label class="col-md-8 control-label">
+                    <div id="hidden_body_content" class="hidden" > {{ event.body }}</div>
                     {{ form.body.label(class="orm-group") }}<br>
-                    {{ form.body(class="ckeditor")  }}
+                    {{ form.body(class="ckeditor", id='body_content') }}
                 </label>
                 <label class="col-md-8 control-label">
                     {{ form.pub_date.label(class="orm-group col-md-2") }}
-                    {{ form.pub_date }}
+                    {{ form.pub_date(value=event.pub_date) }}
                 </label><label class="col-md-8 control-label">
                   {{ form.submit(class_="btn label-success") }}
                 </label>

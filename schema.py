@@ -1,8 +1,9 @@
 # coding:utf-8
-from flask import Flask, session
+from flask import Flask
 from flask_sqlalchemy import SQLAlchemy
 from datetime import datetime
-from werkzeug.security import generate_password_hash, check_password_hash
+from werkzeug.security import generate_password_hash
+from flask_migrate import Migrate
 
 
 app = Flask(__name__)
@@ -13,6 +14,7 @@ db = SQLAlchemy(app)
 app.config['TEMPLATES_AUTO_RELOAD'] = True
 app.jinja_env.auto_reload = True
 app.secret_key = "sawadika"
+migrate = Migrate(app, db)
 
 
 class User(db.Model):
@@ -41,13 +43,14 @@ class Event(db.Model):
     title = db.Column(db.String(80))
     body = db.Column(db.Text)
     pub_date = db.Column(db.DateTime)
+    update_date = db.Column(db.DateTime, nullable=True)
 
     user_id = db.Column(db.Integer, db.ForeignKey('user.id'))
     user = db.relationship(
         'User',
         backref=db.backref('events', lazy='dynamic'))
 
-    def __init__(self, title, body, user, pub_date=None):
+    def __init__(self, title, body, user, pub_date=None, update_date=None):
         self.title = title
         self.body = body
         if pub_date is None:

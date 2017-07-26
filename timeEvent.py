@@ -1,5 +1,5 @@
 # coding:utf-8
-from flask import Flask, render_template, request, redirect, url_for, session, flash
+from flask import Flask, render_template, request, redirect, url_for, session, flash, Response
 from flask_bootstrap import Bootstrap
 from datetime import datetime
 from forms import *
@@ -21,8 +21,6 @@ app.config['SECRET_KEY'] = 'development'
 # app.config['SQLALCHEMY_ECHO'] = True
 app.config['DEBUG_TB_INTERCEPT_REDIRECTS'] = False
 
-# development changed
-app.secret_key = "sawadika"
 # app.config['SQLALCHEMY_DATABASE_URI'] = 'mysql://scott:tiger@127.0.0.1/mydatabase'
 app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:////Users/mike/github/TimeEvent/timeEvent.db'
 app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = True
@@ -129,6 +127,21 @@ def insert_event_record(request, form):
         return redirect(url_for('events_show', page_num=1))
 
 
+def update_event_record(request, form):
+    try:
+        event_id = request.form['event_id']
+        event_obj = Event.query.filter_by(id=event_id).first()
+        event_obj.title, event_obj.body = request.form['title'], request.form['body']
+        db.session.commit()
+        msg = "Record successfully Updated"
+    except:
+        msg = "error in update operation"
+        return render_template('events_mod.html', form=form)
+    finally:
+        flash(msg)
+        return redirect(url_for('events_show', page_num=1))
+
+
 @app.route('/events/add', methods=['POST', 'GET'])
 def events_add():
     form = EventForm()
@@ -137,7 +150,11 @@ def events_add():
             flash("All fields are required.")
             return render_template('events_add.html', form=form)
         else:
-            return insert_event_record(request, form)
+            if request.form['is_update']:
+                return update_event_record(request, form)
+            else:
+                print 'add$'
+                return insert_event_record(request, form)
     else:
         if 'username' in session:
             return render_template('events_add.html', form=form)
@@ -163,6 +180,25 @@ def insert_user_record(request, form):
     finally:
         flash(msg)
         return redirect(url_for('index'))
+
+
+@app.route('/events/modify/<event_id>', methods=['POST', 'GET'])
+def event_mod(event_id):
+    event_obj = Event.query.filter_by(id=event_id).first()
+    user_obj = User.query.filter_by(name=session['username']).first()
+    if event_obj is not None and user_obj.id is event_obj.user_id:
+        eventForm = EventForm(
+            event_id=event_obj.id,
+            is_update=True,
+            update_date=datetime.utcnow())
+        event = {
+            'title': event_obj.title,
+            'body': event_obj.body,
+            'is_update': True,
+            'pub_date': event_obj.pub_date}
+        return render_template('events_mod.html', form=eventForm, event=event)
+    else:
+        return render_template('404.html'), 404
 
 
 @app.route('/user/register', methods=['GET', 'POST'])
@@ -194,7 +230,7 @@ def list_users():
 def index():
     if 'username' in session:
         name = session['username']
-        return render_template('bt_demo.html', name=name)
+        return render_template('index.html', name=name)
     else:
         return redirect(url_for('user_login'))
 
@@ -215,26 +251,31 @@ def hello_name(name):
 
 @app.route('/user/login', )
 def user_login():
-    return render_template('login.html')
+    form = UserForm()
+    return render_template('login.html', form=form)
 
 
-@app.route('/loginCheck', methods=['POST', 'GET'])
+@app.route('/user/loginVerify', methods=['POST', 'GET'])
 def login_action():
     if request.method == 'POST':
-        user_input = request.form['username'].strip()
-        pass_input = request.form['password'].strip()
-        if user_input and user_input is not '':
-            res = User.query.filter_by(name=user_input).first()
-            if res is not None:
-                if check_password_hash(res.password_hash, pass_input):
-                    session['username'] = user_input
+        user_val = request.form['name']
+        pass_val = request.form['password']
+        if user_val and user_val is not '':
+            user_obj = User.query.filter_by(name=user_val).first()
+            if user_obj is not None:
+                if check_password_hash(user_obj.password_hash, pass_val):
+                    session['username'] = user_val
+                    message = "Login Successful!"
+                    flash(message)
                     return redirect(url_for('index'))
                 else:
                     message = "Password input wrong!"
             else:
-                message = "User '" + user_input + "' not exists!"
+                message = "User '" + user_val + "' not exists!"
         else:
             message = "User empty not allowed!"
+    else:
+        return render_template('404.html'), 404
     flash(message)
     return redirect(url_for('user_login'))
 
@@ -244,6 +285,16 @@ def logout_action():
     session.pop('username', None)
     flash('You were successfully logged out!')
     return redirect(url_for('user_login'))
+
+
+@app.errorhandler(404)
+def page_not_found(e):
+    return render_template('404.html'), 404
+
+
+@app.errorhandler(500)
+def internal_server_error(e):
+    return render_template('500.html'), 500
 
 
 if __name__ == "__main__":

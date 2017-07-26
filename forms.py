@@ -1,14 +1,17 @@
 from flask_wtf import FlaskForm
-from wtforms import TextField, IntegerField,\
-    TextAreaField, SubmitField, RadioField, SelectField
+from wtforms import TextField,\
+    TextAreaField, SubmitField, HiddenField, PasswordField
 from wtforms import validators, ValidationError
+
+
+WTF_CSRF_SECRET_KEY = 'a random string'
 
 
 class UserForm(FlaskForm):
     name = TextField(
         "User Name",
         [validators.Required("Please enter your name")])
-    password = TextField(
+    password = PasswordField(
         "Password",
         [validators.Required("Please enter your password")])
     email = TextField(
@@ -28,4 +31,7 @@ class EventForm(FlaskForm):
         [validators.Required("Please enter your Event Content")])
     pub_date = TextField(
         "Publish Date")
+    is_update = HiddenField('Is update', default=None)
+    event_id = HiddenField(default=False)
+    update_date = HiddenField(default=False)
     submit = SubmitField("Send")
