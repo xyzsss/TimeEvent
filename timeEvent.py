@@ -8,6 +8,7 @@ from flask_sqlalchemy import SQLAlchemy
 from schema import User, Event, db
 from flask_debugtoolbar import DebugToolbarExtension
 from werkzeug.security import check_password_hash
+from datetime import datetime, timedelta
 
 
 app = Flask(__name__)
@@ -67,11 +68,15 @@ def get_event_by_user(events):
 
 @app.route('/events/<id>')
 def events_detail(id):
-    evt_obj = Event.query.get(id)
-    title, body = evt_obj.title, evt_obj.body
+    event_obj = Event.query.get(id)
+    # convert to utc +8
+    UTC_OFFSET = 8
+    pub_date_local = event_obj.pub_date + timedelta(hours=UTC_OFFSET)
+    pub_date_string = pub_date_local.strftime('%m/%d/%Y - %H:%M:%S')
     content = {
-        'title': title,
-        'body': body
+        'title': event_obj.title,
+        'body': event_obj.body,
+        'pub_date': pub_date_string
     }
     return render_template('event_detail.html', content=content)
 

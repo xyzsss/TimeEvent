@@ -1,4 +1,11 @@
 {% extends "base.html" %}
+
+{% block title %} 
+    {% if content.title %}
+        {{ content.title }}
+    {% endif %}
+{% endblock title %}
+
 {% block content %}
  <div class="container">
 
@@ -8,12 +15,16 @@
         </div>
 
         <div class="row">
+        <p class="bg-info">{{ content.pub_date }}</p>
+        </div>
+
+        <div class="row">
         {% autoescape false %}
-        {{ content.body }}
+            {{ content.body }}
         {% endautoescape %}
         </div>
      {% endif %}
 
 
  </div>
-{% endblock %}
+{% endblock content %}
