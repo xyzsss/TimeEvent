@@ -14,6 +14,7 @@ from werkzeug.security import generate_password_hash, check_password_hash
 app = Flask(__name__)
 Bootstrap(app)
 
+app.secret_key = 'have a secret key'
 # ENABLE DEBUG TOOLBAR
 app.debug = True
 app.config['SECRET_KEY'] = 'development'
