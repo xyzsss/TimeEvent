@@ -1,38 +1,38 @@
 # coding:utf-8
-from flask import Flask, render_template, request, redirect, url_for, session, flash, Response
+from flask import Flask, render_template, request,\
+    redirect, url_for, session, flash
 from flask_bootstrap import Bootstrap
 from datetime import datetime
 from forms import *
 from flask_sqlalchemy import SQLAlchemy
 from schema import User, Event, db
-# DEVEPLOMENT
-import pdb
 from flask_debugtoolbar import DebugToolbarExtension
-from werkzeug.security import generate_password_hash, check_password_hash
+from werkzeug.security import check_password_hash
 
 
 app = Flask(__name__)
 Bootstrap(app)
 
-app.secret_key = 'have a secret key'
-# ENABLE DEBUG TOOLBAR
-app.debug = True
-app.config['SECRET_KEY'] = 'development'
-# SQL detail
-# app.config['SQLALCHEMY_ECHO'] = True
-app.config['DEBUG_TB_INTERCEPT_REDIRECTS'] = False
 
-# app.config['SQLALCHEMY_DATABASE_URI'] = 'mysql://scott:tiger@127.0.0.1/mydatabase'
-app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:////Users/mike/github/TimeEvent/timeEvent.db'
-app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = True
-# db = SQLAlchemy(app)
-SQLAlchemy(app)
+# ********************** DEBUG **********************
+# basic
+app.config['SECRET_KEY'] = '<replace with a secret key>'
+
+# debug
+app.config['DEBUG'] = True
 toolbar = DebugToolbarExtension(app)
 
-# development added
+# dev
 app.config['TEMPLATES_AUTO_RELOAD'] = True
 app.jinja_env.auto_reload = True
 
+
+# SQL
+app.config['DEBUG_TB_INTERCEPT_REDIRECTS'] = False
+app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:////Users/mike/github/TimeEvent/timeEvent.db'
+app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = True
+
+SQLAlchemy(app)
 
 def get_elapsed_time(time_before):
     if time_before:
@@ -90,7 +90,7 @@ def split_page(records_all, the_order=1, every_page_num=15):
 
 
 @app.route('/events/list/<page_num>')
-def events_show(page_num):
+def events_list(page_num):
     page_num = int(page_num)
     if 'username' in session:
         name = User.query.filter_by(name=session['username']).first()
@@ -101,11 +101,11 @@ def events_show(page_num):
             next_page = page_num + 1 if page_num + 1 <= total_page else False
             last_page = page_num - 1 if page_num > 1 else False
             return render_template(
-                'show_event.html', events=rows, cur_page=page_num,
-                total_page=total_page,
+                'events_list.html', events=rows, cur_page=page_num,
+                total_page=total_page, name=session['username'],
                 next_page=next_page, last_page=last_page)
         else:
-            return render_template('show_event.html', noevents=True)
+            return render_template('events_list.html', noevents=True)
     message = "You come to place named No Man's Land "
     flash(message)
     return redirect(url_for('index'))
@@ -125,7 +125,7 @@ def insert_event_record(request, form):
         return render_template('events_add.html', form=form)
     finally:
         flash(msg)
-        return redirect(url_for('events_show', page_num=1))
+        return redirect(url_for('events_list', page_num=1))
 
 
 def update_event_record(request, form):
@@ -140,7 +140,7 @@ def update_event_record(request, form):
         return render_template('events_mod.html', form=form)
     finally:
         flash(msg)
-        return redirect(url_for('events_show', page_num=1))
+        return redirect(url_for('events_list', page_num=1))
 
 
 @app.route('/events/add', methods=['POST', 'GET'])
@@ -250,15 +250,10 @@ def hello_name(name):
         return render_template('show_page.html', name=name)
 
 
-@app.route('/user/login', )
+@app.route('/user/login', methods=['POST', 'GET'])
 def user_login():
-    form = UserForm()
-    return render_template('login.html', form=form)
-
-
-@app.route('/user/loginVerify', methods=['POST', 'GET'])
-def login_action():
-    if request.method == 'POST':
+    form = UserForm(request.form)
+    if request.method == 'POST' and not form.validate_on_submit():
         user_val = request.form['name']
         pass_val = request.form['password']
         if user_val and user_val is not '':
@@ -275,10 +270,8 @@ def login_action():
                 message = "User '" + user_val + "' not exists!"
         else:
             message = "User empty not allowed!"
-    else:
-        return render_template('404.html'), 404
-    flash(message)
-    return redirect(url_for('user_login'))
+        flash(message)
+    return render_template('login.html', form=form)
 
 
 @app.route('/user/logout')

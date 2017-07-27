@@ -15,15 +15,15 @@
              <legend>USER REGISTER</legend>
                 <label class="col-md-8 control-label">
                     {{ form.name.label(class="orm-group col-md-4 ") }}
-                    {{ form.name }}
+                    {{ form.name(class="form-control", required="true") }}
                 </label>
                 <label class="col-md-8 control-label">
                     {{ form.password.label(class="orm-group col-md-4") }}
-                    {{ form.password }}
+                    {{ form.password(class="form-control", required="true") }}
                 </label>
                 <label class="col-md-8 control-label">
                     {{ form.email.label(class="orm-group col-md-4") }}
-                    {{ form.email }}
+                    {{ form.email(class="form-control", required="true") }}
                 </label>
                 <label class="col-md-8 control-label">
                     {{ form.extra.label(class="orm-group col-md-4") }}

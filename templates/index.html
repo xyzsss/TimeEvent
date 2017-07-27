@@ -4,18 +4,8 @@
 
 {% block content %}
   {{ super() }}
-<div class="container">
-<br/><br/>
 
-     {% if name %}
-      <h4>  
-          <div class="row">
-              <div class="col-md-8"> Hello, {{ name }} </div>
-              <div class="col-md-4">  <a href="/user/logout">Logout</a> </div>
-          </div>
-      </h4>
-     {% endif %}
-
+ <div class="container">
 
       <div class="row">
           <div class="col-md-6"> <h4> <a href="/events/list/1"> SHOW MY EVENTS</a></h4> </div>
@@ -23,7 +13,7 @@
       </div>
             <div class="col-md-12"> <h3>Welcom to Bootstrap</h3></div>
 
-
 </div>
+
 {% endblock %}
 

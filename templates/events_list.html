@@ -1,8 +1,10 @@
 {% extends "base.html" %}
+
 {% block title %} Event Lists {% endblock title %}
 
 
 {% block content %}
+    {{ super() }}
  <div class="container">
     <div class="row">
         <div class="col-md-8"><h2> EVENTS LIST </h2> </div>
@@ -50,4 +52,4 @@
         </div>
     {% endif %}
 </div>
-{% endblock %}
+{% endblock content %}

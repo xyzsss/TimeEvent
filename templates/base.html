@@ -9,10 +9,21 @@
 
 {% block navbar %}
     {{ super() }}
+
+    <div class="row">
+        {% if name %}
+        <h4>
+                <div class="col-md-1"> </div>
+                <div class="col-md-8"> Hello, {{ name }} </div>
+                <div class="col-md-3"> <a href="/user/logout">Logout</a> </div>
+        </h4>
+       {% endif %}
+     </div>
+
     <div class="row text-center">
-      <div class="col-xs-6 col-md-4"><h3> TimeEvent </h3> </div>
-      <div class="col-xs-6 col-md-4"> . </div>
-      <div class="col-xs-6 col-md-4"> . </div>
+      <div class="col-xs-6 col-md-4"><a href="/" class="active"><h3>TimeEvent </h3></a></div>
+      <div class="col-xs-6 col-md-4">  </div>
+      <div class="col-xs-6 col-md-4">  </div>
     </div>
 
     <div class="row">
@@ -25,7 +36,6 @@
                   {% endif %}
               {% endwith %}
           </div>
-       
     </div>
 {% endblock navbar %}
 
