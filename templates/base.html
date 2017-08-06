@@ -15,7 +15,19 @@
         <h4>
                 <div class="col-md-1"> </div>
                 <div class="col-md-8"> Hello, {{ name }} </div>
-                <div class="col-md-3"> <a href="/user/logout">Logout</a> </div>
+                <div class="col-md-1"> 
+        <div class="dropdown">
+          <a data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">
+            SETTING
+          <span class="caret"></span>
+          </a>
+          <ul class="dropdown-menu" aria-labelledby="dLabel">
+            <li> <a href="/user/chpasswd">UPDATE PASSWORD</a> </li>
+          </ul>
+        </div>
+
+</div>
+          <div class="col-md-1"> <a href="/user/logout">Logout</a> </div>
         </h4>
        {% endif %}
      </div>

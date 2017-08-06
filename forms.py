@@ -35,3 +35,16 @@ class EventForm(FlaskForm):
     event_id = HiddenField(default=False)
     update_date = HiddenField(default=False)
     submit = SubmitField("Send")
+
+
+class UpdatePassForm(FlaskForm):
+    old_pass = PasswordField(
+        "Current Password",
+        [validators.Required("Please enter your current password")])
+    new_pass = PasswordField(
+        "New Password",
+        [validators.Required("Please enter your new password")])
+    new_pass_verify = PasswordField(
+        "Verify New Password",
+        [validators.Required("Please enter your new password Again")])
+    submit = SubmitField("Update")

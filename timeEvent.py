@@ -7,7 +7,7 @@ from forms import *
 from flask_sqlalchemy import SQLAlchemy
 from schema import User, Event, db
 from flask_debugtoolbar import DebugToolbarExtension
-from werkzeug.security import check_password_hash
+from werkzeug.security import check_password_hash, generate_password_hash
 from datetime import datetime, timedelta
 
 
@@ -284,6 +284,25 @@ def logout_action():
     session.pop('username', None)
     flash('You were successfully logged out!')
     return redirect(url_for('user_login'))
+
+
+@app.route('/user/chpasswd', methods=['POST', 'GET'])
+def user_password_update():
+    form = UpdatePassForm()
+    if request.method == 'POST' and form.validate_on_submit():
+        old_pass = request.form['old_pass']
+        new_pass = request.form['new_pass']
+        user_obj = User.query.filter_by(name=session['username']).first()
+        if new_pass == request.form['new_pass_verify']\
+                and check_password_hash(user_obj.password_hash, old_pass):
+            user_obj.password_hash = generate_password_hash(new_pass)
+            db.session.commit()
+            message = "Updated successful!"
+        else:
+            message = "New password not matched!"
+        flash(message)
+        return render_template('chpasswd.html', form=form)
+    return render_template('chpasswd.html', form=form)
 
 
 @app.errorhandler(404)

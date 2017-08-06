@@ -1,0 +1,28 @@
+{% extends "base.html" %}
+
+{% block content %}
+    {{ super() }}
+ <div class="container">
+     <form action="/user/chpasswd" method="POST">
+         {{ form.hidden_tag() }}
+          <div class="form-group col-md-8">
+          <legend>USER PASSWORD UPDATE</legend>
+             <label class="col-md-12 control-label">
+                 {{ form.old_pass.label(class="orm-group col-md-4") }}
+                 {{ form.old_pass(class="form-control", required="true") }}
+             </label>
+             <label class="col-md-12 control-label">
+                 {{ form.new_pass.label(class="orm-group col-md-4") }}
+                 {{ form.new_pass(class="form-control", required="true") }}
+             </label>
+             <label class="col-md-12 control-label">
+                 {{ form.new_pass_verify.label(class="orm-group col-md-4") }}
+                 {{ form.new_pass_verify(class="form-control", required="true") }}
+             </label><label class="col-md-12 control-label">
+               {{ form.submit(class_="btn label-success") }}
+             </label>
+
+         </div>
+     </form>
+</div>
+ {% endblock content %}
