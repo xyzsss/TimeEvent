@@ -159,7 +159,6 @@ def events_add():
             if request.form['is_update']:
                 return update_event_record(request, form)
             else:
-                print 'add$'
                 return insert_event_record(request, form)
     else:
         if 'username' in session:
