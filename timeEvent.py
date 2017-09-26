@@ -97,6 +97,15 @@ def split_page(records_all, the_order=1, every_page_num=15):
     return (total_page, records)
 
 
+@app.route("/")
+def index():
+    if 'username' in session:
+        name = session['username']
+        return redirect(url_for('events_list', page_num=1))
+    else:
+        return redirect(url_for('user_login'))
+
+
 @app.route('/events/list/<page_num>')
 def events_list(page_num):
     page_num = int(page_num)
@@ -232,15 +241,6 @@ def list_users():
             'extra': user.extra}
         rows.append(row)
     return render_template("users_list.html", Users=rows)
-
-
-@app.route("/")
-def index():
-    if 'username' in session:
-        name = session['username']
-        return render_template('index.html', name=name)
-    else:
-        return redirect(url_for('user_login'))
 
 
 @app.route("/time")
