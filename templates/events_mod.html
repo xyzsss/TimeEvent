@@ -10,14 +10,14 @@
         </nav>
         <br>
        <form action="/events/add" method="POST">
-             <div class="form-group col-md-8">
+             <div class="form-group col-md-12">
              <legend>EVENT MODIFICATION</legend>
                 {{ form.hidden_tag() }}
                 <label class="col-md-8 control-label">
                     {{ form.title.label }}
                     {{ form.title(size=40,value=event.title) }}
                 </label>
-                <label class="col-md-8 control-label">
+                <label class="col-md-12 control-label">
                     <div id="hidden_body_content" class="hidden" > {{ event.body }}</div>
                     {{ form.body.label(class="orm-group") }}<br>
                     {{ form.body(class="ckeditor", id='body_content') }}

@@ -9,6 +9,7 @@ from schema import User, Event, db
 from flask_debugtoolbar import DebugToolbarExtension
 from werkzeug.security import check_password_hash, generate_password_hash
 from datetime import datetime, timedelta
+import os
 
 
 app = Flask(__name__)
@@ -30,7 +31,9 @@ app.jinja_env.auto_reload = True
 
 # SQL
 app.config['DEBUG_TB_INTERCEPT_REDIRECTS'] = False
-app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:////Users/mike/github/TimeEvent/timeEvent.db'
+db_default_path = 'sqlite:////data/github/TimeEvent/sqlite.db'
+db_env_config = os.environ.get('SQLALCHEMY_DATABASE_URI')
+app.config['SQLALCHEMY_DATABASE_URI'] = db_default_path if db_env_config is None else db_env_config
 app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = True
 
 SQLAlchemy(app)

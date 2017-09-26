@@ -14,14 +14,14 @@
         <br>
         <form action="/events/add" method="POST">
             {{ form.hidden_tag() }}
-             <div class="form-group col-md-8">
+             <div class="form-group col-md-12">
              <legend>EVENT ADDICTION</legend>
                 <label class="col-md-8 control-label">
                     {{ form.title.label(class="orm-group col-md-4") }}
                     {{ form.title(class="form-group-lg") }}
                 </label>
-                <label class="col-md-8 control-label">
-                    {{ form.body.label(class="orm-group") }}<br>
+                <label class="col-md-12 control-label">
+                    {{ form.body.label(class="orm-group") }}
                     {{ form.body(class="ckeditor")  }}
                 </label>
                 <label class="col-md-8 control-label">
